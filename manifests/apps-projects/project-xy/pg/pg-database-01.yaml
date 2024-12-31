@@ -1,0 +1,29 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: project-xy-pg-cluster-01
+spec:
+  description: "Standard GKE PostgreSQL cluster"
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.6
+  enableSuperuserAccess: true
+  instances: 3
+  startDelay: 300
+  primaryUpdateStrategy: unsupervised
+  postgresql:
+    pg_hba:
+      - host all all 10.48.0.0/20 md5
+  bootstrap:
+    initdb:
+      database: app
+  storage:
+    storageClass: premium-rwo
+    size: 40Gi
+  resources:
+    requests:
+      memory: "1Gi"
+      cpu: "1000m"
+    limits:
+      memory: "1Gi"
+      cpu: "1000m"
+  monitoring:
+    enablePodMonitor: true
